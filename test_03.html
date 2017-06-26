@@ -19,8 +19,41 @@
 
 	synth.toMaster();
 
-	var notes = ['A','Ab','B','Bb','C','D','Db','E','Eb','F','G','Gb'];
+	var pitches = ['A','Ab','B','Bb','C','D','Db','E','Eb','F','G','Gb'];
 
+	var notes = [];
+	for(var i=0; i < 10; i++){
+		for(var p=0; p < pitches.length; p++){
+			newNote = pitches[p] + String(i);
+			notes.push(newNote);
+		}
+	}
+
+	console.log(notes);
+
+	// This is a substitute for FindNoteForInterval, which I'm not done writing
+	// It counts up the giant array built with a loop
+	// In the end, FindNoteForInterval should be able to calculate this
+	// without a big premade array, and across any octave up or down
+	function HackyCountUp(note,distance){
+		var place = notes.indexOf(note);
+
+		var pitch = note.substring(0, note.length - 1);
+		var octave = Number(note.substring(note.length - 1));
+		
+		if(place === -1){
+			console.log('ERROR: ' + note + ' does not exist in the note array.') 
+		} else if(octave >= 9 || octave < 0) {
+			// This isn't even a good out of bounds error catcher.
+			// you could still get like, C8 distance 24 and go out of bounds without an error
+			console.log('ERROR: ' + octave + ' is out of range of the hacky array.') 
+		} else {
+			console.log(note + ' + ' + distance + ' = ' + notes[place+distance]);
+			return notes[place+distance];
+		}
+	}
+
+	HackyCountUp("G3",10);
 
 	// For a root note, find the corresponding note
 	// of a given interval distance
@@ -37,13 +70,49 @@
 		var pitch = note.substring(0, note.length - 1);
 		var octave = note.substring(note.length - 1);
 
+		// Divisible bit
+		// First, calculate how many times we'll have to wrap
+		wrapCount = Math.floor(distance/12);
+
+		// Remainder bit
+		modulo = distance % 12;
+
+		// Note should be moved forward by modulo, and 
+		// octave should be incremented by wrapCount
+
+		// so it's index + modulo + wrap
+
+		// so let's say G3 is the root, and 10 is the interval
+		// G3+10 = Eb4;
+		
+		rootIndex = notes.indexOf("G3"); // potentially invalid i just made this syntax up
+
+		// in this example case, rootIndex is 10 (out of 11)
+
+
+
+		// Find the index of rootindex in the notes array
+		// add modulo to that distance.
+
+		// take octave and cast it as a number
+		// add wrapCount to that number
+
+
+
+		// combine the pitch and the octave into one string again
+		// return that string
+
+		// This fails because G3+10 will cause wrap 0. It will return Eb3 which is 2 down. 
+
+		// There needs to be code that determines the note's place in the array, and compensates for it. That, or doesn't use it at all. 
+
+		// Or maybe the index could be used in the calculation to start with?
+
+
+		console.log(distance + ' wraps: ' + wrapCount);
 		console.log('pitch: ' + pitch);
 		console.log('octave: ' + octave);
 	}
-
-	FindNoteForInterval('C3');
-	FindNoteForInterval('Db2');
-	FindNoteForInterval('F0');
 
 	// Play a note (required) for a duration (optional, in ms, defaults to 1s)
 	function playNote(note, duration = 1000){
