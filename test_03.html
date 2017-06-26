@@ -1,0 +1,141 @@
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/0.10.0/Tone.js"></script>
+	<script>
+
+	// Wrapping the SimpleSynth in a PolySynth
+	// to enable multiple notes simultaneously.
+
+	var Tone = window.Tone;
+	
+	var synth = new Tone.PolySynth(
+		6, 
+		Tone.SimpleSynth, {
+			"oscillator" : {
+				"partials" : [0, 2, 3, 4],
+			}
+		}
+	);
+
+	synth.toMaster();
+
+	var notes = ['A','Ab','B','Bb','C','D','Db','E','Eb','F','G','Gb'];
+
+
+	// For a root note, find the corresponding note
+	// of a given interval distance
+	function FindNoteForInterval(note, distance){
+
+		// TODO: confirm the validity of a note.
+		//	 It should have at least 2 characters
+		//	 The first character should be an uppercase letter ABCDEFG
+		//	 The last character should be a positive number 0 - 9
+		//	 Optional middle character should be one of b or #
+
+		// Split the note into its two components, pitch and octave
+		// eg Db3 is the pitch Db and the octave 3
+		var pitch = note.substring(0, note.length - 1);
+		var octave = note.substring(note.length - 1);
+
+		console.log('pitch: ' + pitch);
+		console.log('octave: ' + octave);
+	}
+
+	FindNoteForInterval('C3');
+	FindNoteForInterval('Db2');
+	FindNoteForInterval('F0');
+
+	// Play a note (required) for a duration (optional, in ms, defaults to 1s)
+	function playNote(note, duration = 1000){
+		synth.triggerAttack(note);
+
+		setTimeout(function(){
+			synth.triggerRelease(note);
+		}, duration);
+	}
+
+
+	/*
+	
+	Treat the note provided (eg D#3) as a 0 index
+	Count up through an array of all notes by the amounts listed
+
+	The problem is actually constructing that array, or some kind
+	of count function that eliminates the need for that array.
+
+
+
+	*/
+
+	/*
+	
+	Maj
+	0 4 7
+
+	Min
+	0 3 7
+
+	Dim
+	0 3 6
+	If C add 9
+
+	Aug
+	0 4 8
+	if C add 10
+
+	Sus2
+	0 2 7
+
+	Sus4
+	0 5 7
+
+	7Sus2
+	0 2 7 10
+
+	7Sus4
+	0 5 7 10
+
+	6
+	0 4 7 9
+
+	7
+	0 4 7 10
+
+	9
+	0 4 7 14
+
+	Maj7
+	0 4 7 11
+
+	Maj9
+	0 4 7 11 14
+	if C no 11?
+
+	Maj11
+	0 4 7 11 14 17
+	if C no 11?
+
+	Min6
+	0 3 7 9
+
+	Min7
+	0 3 7 10
+
+	Min9
+	0 3 7 10 14
+
+	Min 11
+	0 3 7 10 14 17
+
+
+
+
+
+	
+	*/
+	</script>
+</head>
+<body>
+	<h2>skjdhf</h2>
+</body>
+</html>

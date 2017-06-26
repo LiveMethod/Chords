@@ -1,0 +1,34 @@
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/0.10.0/Tone.js"></script>
+	<script>
+	var Tone = window.Tone;
+	
+	var osc = new Tone.OmniOscillator();
+
+	// Set a note
+	osc.frequency.value = "C4";
+	
+	// Create a default ADSR envelope
+	var env = new Tone.AmplitudeEnvelope();
+	
+	// Route the oscillator through the envelope
+	osc.connect(env);
+	// and the envelope into the master channel
+	env.toMaster();
+	
+	// Start the oscillator
+	osc.start();
+	// Start the envelope
+	env.triggerAttack();
+	// Note that the envelope needs to be fired because
+	// it contains the attack, which ramps up the volume
+	// of the oscillator from zero
+
+
+	</script>
+</head>
+<body>
+	<h2>skjdhf</h2>
+</body>
+</html>

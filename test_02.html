@@ -1,0 +1,49 @@
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/0.10.0/Tone.js"></script>
+	<script>
+
+	// Wrapping the SimpleSynth in a PolySynth
+	// to enable multiple notes simultaneously.
+
+	var Tone = window.Tone;
+	
+	var synth = new Tone.PolySynth(
+		6, 
+		Tone.SimpleSynth, {
+			"oscillator" : {
+				"partials" : [0, 2, 3, 4],
+			}
+		}
+	);
+
+	synth.toMaster();
+
+
+	// 4 notes
+	var note1 = "C3";
+	var note2 = "E3";
+	var note3 = "G3";
+	var note4 = "C4";
+
+	// Trigger all of them at once as a chord
+	synth.triggerAttack(note1);
+	synth.triggerAttack(note2);
+	synth.triggerAttack(note3);
+	synth.triggerAttack(note4);
+
+	// Set a one second timer and turn them off
+	setTimeout(function(){
+		synth.triggerRelease(note1);
+		synth.triggerRelease(note2);
+		synth.triggerRelease(note3);
+		synth.triggerRelease(note4);
+	}, 1000);
+
+
+	</script>
+</head>
+<body>
+	<h2>skjdhf</h2>
+</body>
+</html>
