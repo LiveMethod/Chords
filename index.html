@@ -36,7 +36,7 @@
 
 			$('.chord').click(function(){
 				var userOctave = $('#user-octave').val();
-				var userDuration = $('#user-duration').val();
+				var userDuration = Number($('#user-duration').val());
 				thisChord = $(this).attr('data-chord');
 				thisPitch = $(this).attr('data-pitch') + userOctave;
 				console.log('playing ' + thisChord + ' ' + thisPitch)
