@@ -6,9 +6,30 @@
 	<script>
 		// playChordForNote("C4", "min11");
 		$(document).ready(function(){
-			
+			////////////////////////
+			//
+			// SETTINGS
+			//
+			////////////////////////
 
-			
+			// var userOctave = $('#user-octave').val();
+			// var userDuration = $('#user-duration').val();
+
+			// $('#user-octave').change(function() {
+			// 	var userOctave = $('#user-octave').val();
+			// 	console.log('user changed octave to ' + userOctave);
+			// });
+
+			// $('#user-duration').change(function() {
+			// 	var userDuration = $('#user-duration').val();
+			// 	console.log('user changed duration to ' + userDuration);
+			// });
+
+			////////////////////////
+			//
+			// CONTENT
+			//
+			////////////////////////
 
 			// start with a title bar
 			// first entry is empty (space above chord labels)
@@ -38,14 +59,28 @@
 			});
 
 			$('.chord').click(function(){
+				var userOctave = $('#user-octave').val();
+				var userDuration = $('#user-duration').val();
 				thisChord = $(this).attr('data-chord');
-				thisPitch = $(this).attr('data-pitch') + '3';
-				console.log(thisChord + ' ' + thisPitch)
-				playChordForNote(thisPitch, thisChord);
+				thisPitch = $(this).attr('data-pitch') + userOctave;
+				console.log('playing ' + thisChord + ' ' + thisPitch)
+				playChordForNote(thisPitch, thisChord, userDuration);
 			});
 		});
 	</script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css
+">
 	<style>
+		.settings{
+			box-sizing: border-box;
+			width: 100%;
+			height: 100px;
+			padding: 20px;
+			background-color: #eee;
+			border-bottom: 1px solid #ddd;
+		}
+
 		.row{
 			display: flex;
 			flex-direction: row;
@@ -53,7 +88,7 @@
 
 		.col{
 			flex: 1;
-			margin: 10px;
+			margin: 4px;
 			padding: 10px 5px;
 		}
 
@@ -71,8 +106,23 @@
 	</style>
 </head>
 <body>
-	<div class="content">
+	<div class="settings">
+		Octave: 
+		<select id="user-octave">
+			<option value="2">2</option>
+			<option value="3" selected="selected" >3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+		</select>
 
+		Preview Length: 
+		<select id="user-duration">
+			<option value="250">1/4 Sec</option>
+			<option value="500" selected="selected" >1/2 Sec</option>
+			<option value="1000">1 Sec</option>
+			<option value="2000">2 Sec</option>
+		</select>
 	</div>
+	<div class="content"></div>
 </body>
 </html>

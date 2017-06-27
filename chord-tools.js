@@ -66,7 +66,7 @@ function playNote(note, duration = 500){
 
 // Convenience function for playing an array of notes as a chord
 // expects array of notes as strings like ['C3','Eb3','G3']
-function playMany(notes, duration = 500){
+function playMany(notes, duration){
 	for(var i = 0; i < notes.length; i++){
 		playNote(notes[i], duration);
 	}
@@ -74,8 +74,8 @@ function playMany(notes, duration = 500){
 
 
 // Convenience function that plays a chord for a note
-function playChordForNote(note, chord = "maj"){
-	playMany( findChordForNote(note, chord) );
+function playChordForNote(note, chord = "maj", duration){
+	playMany( findChordForNote(note, chord), duration );
 }
 
 
