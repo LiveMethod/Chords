@@ -117,9 +117,9 @@ function findNoteForInterval(note, distance){
 
 
 
-// Given a root note, find all notes in that chord
-// by counting their interval distances
-function findChordForNote(note, chord = "maj"){
+// Given a root note, find all notes in a chord
+// by counting interval distances
+function findChordForNote(note, chord = "maj", log = false){
 
 	// Yell if the chord given isn't in the master chord list
 	if (!(chord in chords)){
@@ -138,6 +138,8 @@ function findChordForNote(note, chord = "maj"){
 		noteArray.push(targetNote);
 	}
 
-	console.log('chord for ' + note + ' ' + chord + ' is ' + JSON.stringify(noteArray));
+	if(log){
+		console.log('chord for ' + note + ' ' + chord + ' is ' + JSON.stringify(noteArray));
+	}
 	return noteArray;
 }
