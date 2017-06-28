@@ -4,8 +4,14 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="chord-tools.js"></script>
 	<script>
-		// playChordForNote("C4", "min11");
 		$(document).ready(function(){
+			
+			// the app starts with an empty song
+			// song is an array of blocks
+			// each block is an object with keys pitch, octave, chord
+			var song = [];
+
+			var playQueue = 0;
 
 			// start with a title bar
 			// first entry is empty (space above chord labels)
@@ -34,6 +40,7 @@
 				$('.content').append(row);
 			});
 
+			// Chord browser click handling
 			$('.chord').click(function(){
 				var userOctave = $('#user-octave').val();
 				var userDuration = Number($('#user-duration').val());
@@ -45,6 +52,79 @@
 				$('.selected').removeClass('selected');
 				$(this).addClass('selected');
 			});
+
+			$('.add-block').click(function(){
+				var selected = $('.selected');
+				if(selected.length !== 1){
+					alert('Select a chord before adding.')
+				} else {
+					var selectedChord = selected.attr('data-chord');
+					var selectedPitch = selected.attr('data-pitch');
+					var selectedOctave = $('#user-octave').val();
+					
+					block = {
+						'pitch': selectedPitch,
+						'octave': selectedOctave,
+						'chord':  selectedChord
+					};
+
+					song.push(block);
+					updateState();
+				}
+			});
+			function updateState(){
+
+				// arrangement, big string of generated html of all blocks
+				var agmt = "";
+
+				// loop through the song array
+				// creating a block for each entry
+				$.each(song, function(i){
+					var block = song[i];
+
+					blockName = block.pitch +''+ block.octave + " " + block.chord;
+					agmt = agmt + (
+						'<div class="block" data-pitch="'+block.pitch+'" data-chord="'+block.chord+'" data-octave="'+block.octave+'">'+blockName+'</div>'
+					);
+				});
+
+
+				// then create the "next" block
+				// skipping this for now.
+
+				// replace the old arrangement html
+				$('.blocks').html(agmt);
+			}
+
+			// play button
+			// when the play button is clicked
+			$('.controls__play').click(function(){
+				// playChordForNote(thisPitch, thisChord, userDuration);
+
+				// add a little gap to the play timer so the chords don't overlap
+				var playTimer = setInterval(playQueuedChord, 1000+10);
+
+				function playQueuedChord(){
+					if( playQueue < song.length ){
+
+						var block = song[playQueue];
+						var qdNote = block.pitch + block.octave;
+						var qdChord = block.chord;
+
+						playChordForNote(qdNote, qdChord, 1000)
+						playQueue++;
+
+					} else {
+						window.clearInterval(playTimer);
+						playQueue = 0;
+					}
+				}
+				// launch a chord with a set duration
+				// create a timer for that duration
+				// when the note timer has expired,
+				// move on to the next chord and repeat
+			});
+
 		});
 	</script>
 
@@ -59,6 +139,62 @@
 			background-color: #eee;
 			border-bottom: 1px solid #ddd;
 		}
+
+		.arrangement{
+			box-sizing: border-box;
+			width: 100%;
+			background-color: #f8f8f8;
+			border-bottom: 1px solid #ddd;
+			display: flex;
+		}
+
+			.controls{
+				border-right: 1px solid #ddd;
+				padding: 20px 15px 10px;
+			}
+				.controls a{
+					text-decoration: none;
+					font-size: 32px;
+					opacity: 0.6;
+				}
+				.controls a:hover{
+					opacity: 1;
+
+				}
+
+			.composition{
+				flex: 1;
+				background-color: #fcfcfc;
+				padding: 10px;
+			}
+				.composition .block{
+					box-sizing: border-box;
+					float: left;
+					width: 60px;
+					height: 40px;
+					background-color: #eee;
+					text-align: center;
+					border-radius: 3px;
+					border: 1px solid #ddd;
+					margin-right: 10px;
+					padding-top: 10px;
+				}
+
+				.composition .block--next{
+					border: 2px dashed #ddd;
+					background: none;
+				}
+
+				.add-block{
+					text-decoration: none;
+					font-size: 32px;
+					opacity: 0.6;
+					line-height: 42px;
+				}
+
+				.add-block:hover{
+					opacity: 1;
+				}
 
 		.row{
 			display: flex;
@@ -85,6 +221,7 @@
 
 		.selected, .selected:hover{
 			background-color: #9f9;
+			border-color: green;
 		}
 	</style>
 </head>
@@ -105,6 +242,20 @@
 			<option value="1000">1 Sec</option>
 			<option value="2000">2 Sec</option>
 		</select>
+	</div>
+	<div class="arrangement">
+		<div class="controls">
+			<!-- <a href="#" class="controls__back"> ⏮ </a> -->
+			<a href="#" class="controls__play"> 🍰 </a>
+			<a href="#" class="controls__stop"> ⏹ </a>
+			<!-- <a href="#" class="controls__forward"> ⏭ </a> -->
+		</div>
+		<div class="composition">
+			<div class="blocks">
+			</div>
+			<a href="#" class="add-block">✅</a>
+		</div>
+
 	</div>
 	<div class="content"></div>
 </body>
