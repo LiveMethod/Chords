@@ -54,7 +54,7 @@
 			});
 
 			$('.add-block').click(function(){
-				var selected = $('.selected');
+				var selected = $('.content .selected');
 				if(selected.length !== 1){
 					alert('Select a chord before adding.')
 				} else {
@@ -96,6 +96,19 @@
 				$('.blocks').html(agmt);
 			}
 
+			// clicking a block to preview
+			$('.composition').on('click', '.block', function(event){
+				$('.composition .selected').removeClass('selected');
+				$(event.target).addClass('selected');
+				
+				var block = song[$(event.target).index()];
+				var selNote = block.pitch + block.octave;
+				var selChord = block.chord;
+				var userDuration = Number($('#user-duration').val());
+
+				playChordForNote(selNote, selChord, userDuration);
+			});
+
 			// play button
 			// when the play button is clicked
 			$('.controls__play').click(function(){
@@ -114,15 +127,15 @@
 						playChordForNote(qdNote, qdChord, 1000)
 
 						// update UI
-						$('.blocks .selected').removeClass('selected');
-						$('.blocks .block').eq(playQueue).addClass('selected');
+						$('.blocks .playing').removeClass('playing');
+						$('.blocks .block').eq(playQueue).addClass('playing');
 
 						playQueue++;
 
 					} else {
 						window.clearInterval(playTimer);
 						playQueue = 0;
-						$('.blocks .selected').removeClass('selected');
+						$('.blocks .playing').removeClass('playing');
 					}
 				}
 				// launch a chord with a set duration
@@ -202,6 +215,16 @@
 					opacity: 1;
 				}
 
+				.block.selected{
+					border-color: #28f;
+					background-color: #def;
+				}
+
+				.block.playing{
+					background-color: #9f9;
+					border-color: green;
+				}
+
 		.row{
 			display: flex;
 			flex-direction: row;
@@ -225,7 +248,6 @@
 			cursor: pointer;
 		}
 
-		.block.selected,
 		.selected, .selected:hover{
 			background-color: #9f9;
 			border-color: green;
