@@ -41,6 +41,9 @@
 				thisPitch = $(this).attr('data-pitch') + userOctave;
 				console.log('playing ' + thisChord + ' ' + thisPitch)
 				playChordForNote(thisPitch, thisChord, userDuration);
+
+				$('.selected').removeClass('selected');
+				$(this).addClass('selected');
 			});
 		});
 	</script>
@@ -78,6 +81,10 @@
 		.chord:hover{
 			background-color: #ddd;
 			cursor: pointer;
+		}
+
+		.selected, .selected:hover{
+			background-color: #9f9;
 		}
 	</style>
 </head>
