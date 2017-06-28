@@ -112,11 +112,17 @@
 						var qdChord = block.chord;
 
 						playChordForNote(qdNote, qdChord, 1000)
+
+						// update UI
+						$('.blocks .selected').removeClass('selected');
+						$('.blocks .block').eq(playQueue).addClass('selected');
+
 						playQueue++;
 
 					} else {
 						window.clearInterval(playTimer);
 						playQueue = 0;
+						$('.blocks .selected').removeClass('selected');
 					}
 				}
 				// launch a chord with a set duration
@@ -219,6 +225,7 @@
 			cursor: pointer;
 		}
 
+		.block.selected,
 		.selected, .selected:hover{
 			background-color: #9f9;
 			border-color: green;
