@@ -11,7 +11,8 @@
 			// each block is an object with keys pitch, octave, chord
 			var song = [];
 
-			var playQueue = 0;
+			var playTimer = setInterval(playQueuedChord, 1000+10);
+			var playQueue = -1;
 
 			// start with a title bar
 			// first entry is empty (space above chord labels)
@@ -109,40 +110,42 @@
 				playChordForNote(selNote, selChord, userDuration);
 			});
 
-			// play button
-			// when the play button is clicked
-			$('.controls__play').click(function(){
-				// playChordForNote(thisPitch, thisChord, userDuration);
+			function playQueuedChord(){
+				if(playQueue < song.length && playQueue > -1 ){
 
-				// add a little gap to the play timer so the chords don't overlap
-				var playTimer = setInterval(playQueuedChord, 1000+10);
+					console.log('lsdkjkjdhf');
 
-				function playQueuedChord(){
-					if( playQueue < song.length ){
+					var block = song[playQueue];
+					var qdNote = block.pitch + block.octave;
+					var qdChord = block.chord;
 
-						var block = song[playQueue];
-						var qdNote = block.pitch + block.octave;
-						var qdChord = block.chord;
+					playChordForNote(qdNote, qdChord, 1000)
 
-						playChordForNote(qdNote, qdChord, 1000)
-
-						// update UI
-						$('.blocks .playing').removeClass('playing');
-						$('.blocks .block').eq(playQueue).addClass('playing');
-
-						playQueue++;
-
-					} else {
-						window.clearInterval(playTimer);
+					// update UI
+					$('.blocks .playing').removeClass('playing');
+					$('.blocks .block').eq(playQueue).addClass('playing');
+					playQueue++;
+					if(playQueue >= song.length) {
 						playQueue = 0;
-						$('.blocks .playing').removeClass('playing');
 					}
 				}
-				// launch a chord with a set duration
-				// create a timer for that duration
-				// when the note timer has expired,
-				// move on to the next chord and repeat
+			}
+
+			// play button
+			$('.controls__play').click(function(){
+				if(song.length > 0){
+					playQueue = 0;
+				} else {
+					alert('please add a note before playing a song');
+				}
 			});
+
+			// play button
+			$('.controls__stop').click(function(){
+				playQueue = -1;
+			});
+
+
 
 		});
 	</script>
