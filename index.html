@@ -142,6 +142,7 @@
 
 			// play button
 			$('.controls__stop').click(function(){
+				$('.blocks .playing').removeClass('playing');
 				playQueue = -1;
 			});
 
